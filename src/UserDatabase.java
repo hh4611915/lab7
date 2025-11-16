@@ -54,5 +54,6 @@ public class UserDatabase {
             System.out.println("Error loading users: " + e.getMessage());
         }
     }
+
 }
 

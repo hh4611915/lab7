@@ -4,3 +4,5 @@ STUDENT|S002|Omar|omar@uni.com|hashed789
 INSTRUCTOR|I001|Dr. Ahmed|ahmed@uni.com|hashed123
 STUDENT|S001|Mona|mona@uni.com|hashed456
 STUDENT|S002|Omar|omar@uni.com|hashed789
+STUDENT|S603|fares|fares@g.com|328c6b2f03203cebcf3b4c549141c6bac3897b8a1e96c444014e64ee16c3012b
+STUDENT|S9|fares|fares@gmail.com|a2ff563a67672acf75641546f58af67262f31e9a3236268795a561f0df11e358
