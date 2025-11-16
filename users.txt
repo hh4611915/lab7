@@ -4,3 +4,9 @@ STUDENT|S002|Omar|omar@uni.com|hashed789
 INSTRUCTOR|I001|Dr. Ahmed|ahmed@uni.com|hashed123
 STUDENT|S001|Mona|mona@uni.com|hashed456
 STUDENT|S002|Omar|omar@uni.com|hashed789
+INSTRUCTOR|I001|Dr. Ahmed|ahmed@uni.com|hashed123
+STUDENT|S001|Mona|mona@uni.com|hashed456
+STUDENT|S002|Omar|omar@uni.com|hashed789
+INSTRUCTOR|I001|Dr. Ahmed|ahmed@uni.com|hashed123
+STUDENT|S001|Mona|mona@uni.com|hashed456
+STUDENT|S002|Omar|omar@uni.com|hashed789

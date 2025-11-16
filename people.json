@@ -1,0 +1,22 @@
+{
+    "students": [
+        {
+            "name": "Ali",
+            "hashPassword": "hashed123",
+            "id": "S001",
+            "email": "ali@gmail.com"
+        },
+        {
+            "name": "Sara",
+            "hashPassword": "hashed456",
+            "id": "S002",
+            "email": "sara@gmail.com"
+        }
+    ],
+    "instructors": [{
+        "name": "Omar",
+        "hashPassword": "pass999",
+        "id": "I001",
+        "email": "omar@gmail.com"
+    }]
+}

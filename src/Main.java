@@ -1,86 +1,39 @@
-import java.io.File;
-import java.io.IOException;
-
 public class Main {
     public static void main(String[] args) {
 
-        // --- Ensure files exist ---
-        try {
-            File userFile = new File("users.txt");
-            if (!userFile.exists()) userFile.createNewFile();
+        // PEOPLE database
+        PeopleDB peopleDB = new PeopleDB();
+        Student s1 = new Student("S001", "Ali", "ali@gmail.com", "hashed123");
+        Student s2 = new Student("S002", "Sara", "sara@gmail.com", "hashed456");
+        Instructor i1 = new Instructor("I001", "Omar", "omar@gmail.com", "pass999");
 
-            File courseFile = new File("courses.txt");
-            if (!courseFile.exists()) courseFile.createNewFile();
-        } catch (IOException e) {
-            System.out.println("Error creating files: " + e.getMessage());
-            return;
-        }
+        peopleDB.addStudent(s1);
+        peopleDB.addStudent(s2);
+        peopleDB.addInstructor(i1);
 
-        // --- Create databases ---
-        UserDatabase userDB = new UserDatabase("users.txt");
-        CourseDatabase courseDB = new CourseDatabase("courses.txt");
+        // COURSES + LESSONS database
+        CourseLessonDB courseDB = new CourseLessonDB();
+        Course c1 = new Course("C001", "Java Basics");
+        Course c2 = new Course("C002", "Python Intro");
+        Lesson l1 = new Lesson("L001", "Intro Lesson","hhshshsh");
+        Lesson l2 = new Lesson("L002", "Advanced Lesson","jhdhshsh");
 
-        // --- Create an instructor ---
-        Instructor instructor1 = new Instructor("I001", "Dr. Ahmed", "ahmed@uni.com", "hashed123");
-        userDB.addUser(instructor1);
+        courseDB.addCourse(c1);
+        courseDB.addCourse(c2);
+        courseDB.addLesson(l1);
+        courseDB.addLesson(l2);
 
-        // --- Create courses ---
-        Course course1 = new Course("C001", "Java Programming");
-        Course course2 = new Course("C002", "Data Structures");
+        // Display loaded data
+        System.out.println("\nStudents:");
+        for (Student st : peopleDB.getStudents()) System.out.println(st.getId() + " - " + st.getName());
 
-        // Add courses to database
-        courseDB.addCourse(course1);
-        courseDB.addCourse(course2);
+        System.out.println("\nInstructors:");
+        for (Instructor ins : peopleDB.getInstructors()) System.out.println(ins.getId() + " - " + ins.getName());
 
-        // --- Add lessons to courses ---
-        Lesson lesson1 = new Lesson("L001", "Java Basics", "Intro to Java");
-        Lesson lesson2 = new Lesson("L002", "OOP in Java", "Classes and Objects");
-        Lesson lesson3 = new Lesson("L003", "Arrays & Lists", "Working with arrays and lists");
+        System.out.println("\nCourses:");
+        for (Course co : courseDB.getCourses()) System.out.println(co.getId() + " - " + co.getName());
 
-        instructor1.addLessonToCourse(course1, lesson1);
-        instructor1.addLessonToCourse(course1, lesson2);
-        instructor1.addLessonToCourse(course2, lesson3);
-
-        // --- Create students ---
-        Student student1 = new Student("S001", "Mona", "mona@uni.com", "hashed456");
-        Student student2 = new Student("S002", "Omar", "omar@uni.com", "hashed789");
-
-        // Add students to database
-        userDB.addUser(student1);
-        userDB.addUser(student2);
-
-        // --- Enroll students in courses ---
-        student1.enrollCourse(course1);
-        student2.enrollCourse(course1);
-        student2.enrollCourse(course2);
-
-        // --- Update student progress ---
-        student1.updateProgress("C001", 50.0);
-        student2.updateProgress("C001", 75.0);
-        student2.updateProgress("C002", 20.0);
-
-        // --- Display info ---
-        System.out.println("=== Instructors ===");
-        instructor1.showInfo();
-        instructor1.viewCreatedCourses();
-
-        System.out.println("\n=== Courses and Lessons ===");
-        for (Course c : courseDB.getCourses()) {
-            System.out.println("Course: " + c.getName());
-            c.viewLessons();
-            c.viewStudents();
-            System.out.println();
-        }
-
-        System.out.println("=== Students and Progress ===");
-        student1.showInfo();
-        student1.viewProgress();
-
-        student2.showInfo();
-        student2.viewProgress();
-
-        // --- Save databases again ---
-        userDB.saveToFile();
-        courseDB.saveToFile();
+        System.out.println("\nLessons:");
+        for (Lesson le : courseDB.getLessons()) System.out.println(le.getId() + " - " + le.getId());
     }
 }

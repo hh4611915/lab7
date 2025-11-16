@@ -1,0 +1,26 @@
+{
+    "courses": [
+        {
+            "name": "Java Basics",
+            "id": "C001",
+            "lessons": []
+        },
+        {
+            "name": "Python Intro",
+            "id": "C002",
+            "lessons": []
+        }
+    ],
+    "lessons": [
+        {
+            "id": "L001",
+            "title": "Intro Lesson",
+            "content": "hhshshsh"
+        },
+        {
+            "id": "L002",
+            "title": "Advanced Lesson",
+            "content": "jhdhshsh"
+        }
+    ]
+}

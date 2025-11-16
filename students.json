@@ -1,0 +1,9 @@
+[{
+    "role": "student",
+    "progresses": [],
+    "enrolledCourses": [],
+    "name": "Ali",
+    "hashPassword": "hashed123",
+    "id": "S001",
+    "email": "ali@gmail.com"
+}]

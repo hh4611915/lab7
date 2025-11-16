@@ -3,11 +3,20 @@ public abstract class User {
     protected String name;
     protected String email;
     protected String hashPassword; // store hashed password
+    protected String role;
 
     public User(String id, String name, String email, String hashPassword) {
-        this.id = id;
+        this.id = id.toUpperCase();
         this.name = name;
         this.email = email;
+        if(this.id.charAt(0)=='S')
+        {
+            this.role="student";
+        }
+        else {
+            this.role="instructor";
+        }
+
         this.hashPassword = hashPassword;
     }
 
