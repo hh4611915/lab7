@@ -4,8 +4,9 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
 
+        new WelcomeMenu();
         // --- Ensure files exist ---
-        try {
+        /*try {
             File userFile = new File("users.txt");
             if (!userFile.exists()) userFile.createNewFile();
 
@@ -81,6 +82,6 @@ public class Main {
 
         // --- Save databases again ---
         userDB.saveToFile();
-        courseDB.saveToFile();
+        courseDB.saveToFile();*/
     }
 }
