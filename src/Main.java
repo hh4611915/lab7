@@ -1,8 +1,8 @@
 public class Main {
     public static void main(String[] args) {
-
+        new WelcomeMenu();
         // PEOPLE database
-        PeopleDB peopleDB = new PeopleDB();
+        /*PeopleDB peopleDB = new PeopleDB();
         Student s1 = new Student("S001", "Ali", "ali@gmail.com", "hashed123");
         Student s2 = new Student("S002", "Sara", "sara@gmail.com", "hashed456");
         Instructor i1 = new Instructor("I001", "Omar", "omar@gmail.com", "pass999");
@@ -34,6 +34,6 @@ public class Main {
         for (Course co : courseDB.getCourses()) System.out.println(co.getId() + " - " + co.getName());
 
         System.out.println("\nLessons:");
-        for (Lesson le : courseDB.getLessons()) System.out.println(le.getId() + " - " + le.getId());
+        for (Lesson le : courseDB.getLessons()) System.out.println(le.getId() + " - " + le.getId());*/
     }
 }
