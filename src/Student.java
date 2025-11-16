@@ -52,4 +52,20 @@ public class Student extends User {
         public double getPercentage() { return percentage; }
         public void setPercentage(double percentage) { this.percentage = percentage; }
     }
+
+    public ArrayList<Course> getEnrolledCourses() {
+        return enrolledCourses;
+    }
+
+    public void setEnrolledCourses(ArrayList<Course> enrolledCourses) {
+        this.enrolledCourses = enrolledCourses;
+    }
+
+    public ArrayList<Progress> getProgresses() {
+        return progresses;
+    }
+
+    public void setProgresses(ArrayList<Progress> progresses) {
+        this.progresses = progresses;
+    }
 }

@@ -1,6 +1,5 @@
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.*;
 import java.util.ArrayList;
 
@@ -8,10 +7,12 @@ public class PeopleDB {
     private final String filename = "people.json";
     private ArrayList<Student> students;
     private ArrayList<Instructor> instructors;
+    private ArrayList<Course> courses;
 
     public PeopleDB() {
         students = new ArrayList<>();
         instructors = new ArrayList<>();
+        courses = new ArrayList<>();
         load();
     }
 
@@ -25,6 +26,11 @@ public class PeopleDB {
         save();
     }
 
+    public void addCourse(Course c) {
+        courses.add(c);
+        save();
+    }
+
     public ArrayList<Student> getStudents() {
         return students;
     }
@@ -33,16 +39,20 @@ public class PeopleDB {
         return instructors;
     }
 
+    public ArrayList<Course> getCourses() {
+        return courses;
+    }
+
     private void save() {
         try {
             JSONObject obj = new JSONObject();
             obj.put("students", new JSONArray(students));
             obj.put("instructors", new JSONArray(instructors));
+            obj.put("courses", new JSONArray(courses));
 
             try (FileWriter writer = new FileWriter(filename)) {
                 writer.write(obj.toString(4));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,13 +80,18 @@ public class PeopleDB {
             if (sArr != null) {
                 for (int i = 0; i < sArr.length(); i++) {
                     JSONObject s = sArr.getJSONObject(i);
-                    Student student = new Student(
-                            s.getString("id"),
-                            s.getString("name"),
-                            s.getString("email"),
-                            s.getString("hashedPassword")
-                    );
-                    students.add(student);
+
+                    if (s.has("id") && s.has("name") && s.has("email") && s.has("hashPassword")) {
+                        Student student = new Student(
+                                s.getString("id"),
+                                s.getString("name"),
+                                s.getString("email"),
+                                s.getString("hashPassword")
+                        );
+                        students.add(student);
+                    } else {
+                        System.out.println("Error: Missing required fields for student at index " + i);
+                    }
                 }
             }
 
@@ -84,13 +99,18 @@ public class PeopleDB {
             if (iArr != null) {
                 for (int i = 0; i < iArr.length(); i++) {
                     JSONObject ins = iArr.getJSONObject(i);
-                    Instructor instructor = new Instructor(
-                            ins.getString("id"),
-                            ins.getString("name"),
-                            ins.getString("email"),
-                            ins.getString("hashedPassword")
-                    );
-                    instructors.add(instructor);
+
+                    if (ins.has("id") && ins.has("name") && ins.has("email") && ins.has("hashPassword")) {
+                        Instructor instructor = new Instructor(
+                                ins.getString("id"),
+                                ins.getString("name"),
+                                ins.getString("email"),
+                                ins.getString("hashPassword")
+                        );
+                        instructors.add(instructor);
+                    } else {
+                        System.out.println("Error: Missing required fields for instructor at index " + i);
+                    }
                 }
             }
 
@@ -99,3 +119,4 @@ public class PeopleDB {
         }
     }
 }
+

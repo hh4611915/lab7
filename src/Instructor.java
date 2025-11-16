@@ -42,6 +42,14 @@ public class Instructor extends User {
         }
     }
 
+    public ArrayList<Course> getCreatedCourses() {
+        return createdCourses;
+    }
+
+    public void setCreatedCourses(ArrayList<Course> createdCourses) {
+        this.createdCourses = createdCourses;
+    }
+
     @Override
     public void showInfo() {
         System.out.println("Instructor ID: " + id + ", Name: " + name + ", Email: " + email);
