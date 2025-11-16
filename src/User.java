@@ -1,17 +1,22 @@
 public abstract class User {
+    protected String role;
     protected String id;
     protected String name;
     protected String email;
     protected String hashPassword; // store hashed password
 
     public User(String id, String name, String email, String hashPassword) {
-        this.id = id;
+        this.id = id.toUpperCase();
         this.name = name;
         this.email = email;
         this.hashPassword = hashPassword;
+        if(this.id.charAt(0) == 'S')
+            this.role = "Student";
+        else this.role = "Instructor";
     }
 
-    // Getters and setters
+
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -24,6 +29,5 @@ public abstract class User {
     public String getHashPassword() { return hashPassword; }
     public void setHashPassword(String hashPassword) { this.hashPassword = hashPassword; }
 
-    // Abstract method to display user info
     public abstract void showInfo();
 }
