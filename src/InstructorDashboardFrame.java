@@ -5,14 +5,17 @@ public class InstructorDashboardFrame extends JFrame {
     private CourseLessonDB db;
     private PeopleDB peopleDb;
     private String instructorId;
+
     private DefaultListModel<Course> courseModel = new DefaultListModel<>();
     private JList<Course> courseList = new JList<>(courseModel);
+
     private JButton btnAdd = new JButton("Add Course");
     private JButton btnEdit = new JButton("Edit Course");
     private JButton btnDelete = new JButton("Delete Course");
     private JButton btnLessons = new JButton("Manage Lessons");
     private JButton btnStudents = new JButton("View Enrolled Students");
     private JButton btnRefresh = new JButton("Refresh");
+    private JButton btnLogout = new JButton("Logout");
 
     public InstructorDashboardFrame(CourseLessonDB db, PeopleDB peopleDb, String instructorId) {
         this.db = db;
@@ -33,13 +36,14 @@ public class InstructorDashboardFrame extends JFrame {
         courseList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         left.add(new JScrollPane(courseList), BorderLayout.CENTER);
 
-        JPanel leftButtons = new JPanel(new GridLayout(7,1,8,8));
+        JPanel leftButtons = new JPanel(new GridLayout(8, 1, 8, 8));
         leftButtons.add(btnAdd);
         leftButtons.add(btnEdit);
         leftButtons.add(btnDelete);
         leftButtons.add(btnLessons);
         leftButtons.add(btnStudents);
         leftButtons.add(btnRefresh);
+        leftButtons.add(btnLogout);
 
         add(left, BorderLayout.CENTER);
         add(leftButtons, BorderLayout.EAST);
@@ -50,6 +54,7 @@ public class InstructorDashboardFrame extends JFrame {
         btnLessons.addActionListener(e -> onLessons());
         btnStudents.addActionListener(e -> onViewStudents());
         btnRefresh.addActionListener(e -> loadCourses());
+        btnLogout.addActionListener(e -> onLogout());
     }
 
     private void loadCourses() {
@@ -106,5 +111,13 @@ public class InstructorDashboardFrame extends JFrame {
         if (c == null) { JOptionPane.showMessageDialog(this, "Select a course."); return; }
         EnrolledStudentsDialog dlg = new EnrolledStudentsDialog(this, peopleDb, c);
         dlg.setVisible(true);
+    }
+
+    private void onLogout() {
+        int ok = JOptionPane.showConfirmDialog(this, "Logout?", "Confirm", JOptionPane.YES_NO_OPTION);
+        if (ok == JOptionPane.YES_OPTION) {
+            dispose();
+            new Login().setVisible(true);
+        }
     }
 }
