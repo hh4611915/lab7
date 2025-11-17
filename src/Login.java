@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 public class Login extends JFrame {
     private JPanel p1;
@@ -17,7 +18,7 @@ public class Login extends JFrame {
         setTitle("Login Menu");
         setLocationRelativeTo(null);
         setContentPane(p1);
-
+        PeopleDB p = new PeopleDB();
 
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -30,9 +31,8 @@ public class Login extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
             String id = textFieldID.getText();
-                if(!v.idExist(id)){
-                    JOptionPane.showMessageDialog(null,"ID Doesnt Exist");
-                    return;
+                if(!v.idExist(id)) {
+                    JOptionPane.showMessageDialog(null, "ID Doesnt Exist");
                 }
                 String password = textFieldPassword.getText();
                 if(password == null || password.trim().isEmpty()){
@@ -50,10 +50,18 @@ public class Login extends JFrame {
                         JOptionPane.showMessageDialog(null,"Incorrect Password");
                     return;
                 }
-                if(id.charAt(0)=='S'){
+                if(id.toUpperCase().charAt(0)=='S'){
                     JOptionPane.showMessageDialog(null,"Login Successful\nWelcome " + name);
+                    ArrayList<Student> students = p.getStudents();
+                    Student s = null;
+                    for(Student student:students){
+                        if (student.getId().equalsIgnoreCase(id)){
+                            s = student;
+                            break;
+                        }
+                    }
                     setVisible(false);
-                    //new StudentMenu();
+                    new studentDashboard(s);
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Login Successful\nWelcome " + name);
@@ -61,10 +69,11 @@ public class Login extends JFrame {
                     PeopleDB peopleDB = new PeopleDB();
                     CourseLessonDB courseLessonDB = new CourseLessonDB();
                     new InstructorDashboardFrame(courseLessonDB,peopleDB,id);
+
                 }
 
 
-            }
+                }
         });
-    }
+        }
 }

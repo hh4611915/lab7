@@ -11,7 +11,7 @@
         {
             "name": "Python Intro",
             "description": "",
-            "students": [],
+            "students": ["S555"],
             "id": "C002",
             "instructorId": "",
             "lessons": []
@@ -19,7 +19,7 @@
         {
             "name": "logic",
             "description": "",
-            "students": [],
+            "students": ["S555"],
             "id": "c23",
             "instructorId": "I400",
             "lessons": []
@@ -27,10 +27,49 @@
         {
             "name": "yay",
             "description": "",
-            "students": [],
+            "students": ["S555"],
             "id": "c22",
             "instructorId": "I400",
             "lessons": []
+        },
+        {
+            "name": "Python",
+            "description": "",
+            "students": ["S555"],
+            "id": "C003",
+            "instructorId": "",
+            "lessons": []
+        },
+        {
+            "name": "C++",
+            "description": "HARD AS FUCK",
+            "students": ["S555"],
+            "id": "c9601",
+            "instructorId": "i555",
+            "lessons": [{
+                "id": "l888",
+                "title": "INTRO",
+                "content": ""
+            }]
+        },
+        {
+            "name": "Digital logic",
+            "description": "dr. M will F U",
+            "students": ["S555"],
+            "id": "c555",
+            "instructorId": "i555",
+            "lessons": [
+                {
+                    "id": "l555",
+                    "title": "FINALE",
+                    "content": ""
+                },
+                {
+                    "id": "l999",
+                    "title": "SUMMER",
+                    "content": ""
+                }
+            ]
         }
     ],
     "lessons": [
