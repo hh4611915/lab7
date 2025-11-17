@@ -2,12 +2,34 @@
     "courses": [
         {
             "name": "Java Basics",
+            "description": "",
+            "students": [],
             "id": "C001",
+            "instructorId": "",
             "lessons": []
         },
         {
             "name": "Python Intro",
+            "description": "",
+            "students": [],
             "id": "C002",
+            "instructorId": "",
+            "lessons": []
+        },
+        {
+            "name": "logic",
+            "description": "",
+            "students": [],
+            "id": "c23",
+            "instructorId": "I400",
+            "lessons": []
+        },
+        {
+            "name": "yay",
+            "description": "",
+            "students": [],
+            "id": "c22",
+            "instructorId": "I400",
             "lessons": []
         }
     ],

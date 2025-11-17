@@ -1,50 +1,64 @@
-
 import javax.swing.*;
 import java.awt.*;
 
 public class CourseFormDialog extends JDialog {
-    private JTextField tfId = new JTextField();
+
+    private JTextField tfCourseId = new JTextField();
     private JTextField tfTitle = new JTextField();
-    private JTextArea taDesc = new JTextArea(5, 20);
+    private JTextArea taDescription = new JTextArea(6, 25);
+    private ValidationAndHashing v = new ValidationAndHashing();
     private JButton btnSave = new JButton("Save");
     private JButton btnCancel = new JButton("Cancel");
+
     private boolean saved = false;
 
-    public CourseFormDialog(Frame owner, String title, Course course) {
-        super(owner, title, true);
-        setSize(420, 300);
+    public CourseFormDialog(Window owner, String title, Course course) {
+        super(owner, title, ModalityType.APPLICATION_MODAL);
+        setSize(420, 320);
         setLocationRelativeTo(owner);
-        initComponents(course);
+        init(course);
     }
 
-    private void initComponents(Course course) {
+    private void init(Course course) {
         JPanel p = new JPanel(new BorderLayout(6,6));
-        JPanel fields = new JPanel(new GridLayout(3,1,4,4));
-        fields.add(labeled("Course ID:", tfId));
+        JPanel fields = new JPanel(new GridLayout(2,1,4,4));
+        fields.add(labeled("Course ID:", tfCourseId));
         fields.add(labeled("Title:", tfTitle));
-        JPanel descPanel = new JPanel(new BorderLayout());
-        descPanel.add(new JLabel("Description:"), BorderLayout.NORTH);
-        descPanel.add(new JScrollPane(taDesc), BorderLayout.CENTER);
         p.add(fields, BorderLayout.NORTH);
-        p.add(descPanel, BorderLayout.CENTER);
-
+        JPanel descriptionPanel = new JPanel(new BorderLayout());
+        descriptionPanel.add(new JLabel("Description:"), BorderLayout.NORTH);
+        descriptionPanel.add(new JScrollPane(taDescription), BorderLayout.CENTER);
+        p.add(descriptionPanel, BorderLayout.CENTER);
         JPanel buttons = new JPanel();
-        buttons.add(btnSave); buttons.add(btnCancel);
+        buttons.add(btnSave);
+        buttons.add(btnCancel);
         p.add(buttons, BorderLayout.SOUTH);
-
-        if (course != null) {
-            tfId.setText(course.getCourseId()); tfId.setEnabled(false);
-            tfTitle.setText(course.getTitle());
-            taDesc.setText(course.getDescription());
-        }
-
         add(p);
-
+        if (course != null) {
+            tfCourseId.setText(course.getCourseId());
+            tfCourseId.setEnabled(false);
+            tfTitle.setText(course.getTitle());
+            taDescription.setText(course.getDescription());
+        }
         btnSave.addActionListener(e -> {
-            if (tfId.getText().trim().isEmpty() || tfTitle.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "ID and Title required.");
+            String cid = tfCourseId.getText().trim();
+            String title = tfTitle.getText().trim();
+
+            if (cid.isEmpty() || title.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Course ID and Title are required.");
                 return;
             }
+
+            if (!v.validID(cid, "Course")) {
+                JOptionPane.showMessageDialog(this, "Invalid Course ID. Must start with C followed by digits.");
+                return;
+            }
+
+            if (tfCourseId.isEnabled() && v.courseIdExist(cid)) {
+                JOptionPane.showMessageDialog(this, "This Course ID already exists.");
+                return;
+            }
+
             saved = true;
             setVisible(false);
         });
@@ -58,8 +72,19 @@ public class CourseFormDialog extends JDialog {
         return p;
     }
 
-    public boolean isSaved() { return saved; }
-    public String getCourseId() { return tfId.getText().trim(); }
-    public String getTitle() { return tfTitle.getText().trim(); }
-    public String getDescription() { return taDesc.getText().trim(); }
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public String getCourseId() {
+        return tfCourseId.getText().trim();
+    }
+
+    public String getTitle() {
+        return tfTitle.getText().trim();
+    }
+
+    public String getDescription() {
+        return taDescription.getText().trim();
+    }
 }

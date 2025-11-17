@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class ValidationAndHashing {
     private PeopleDB list = new PeopleDB();
+    private CourseLessonDB db = new CourseLessonDB();
     public boolean gmailValidation(String gmail){
             if(gmail == null || gmail.trim().isEmpty())
                 return false;
@@ -60,20 +61,37 @@ public class ValidationAndHashing {
         }
         return null;
     }
-    public boolean validID(String id,String type){
-        if(id == null || id.trim().isEmpty())
+    public boolean validID(String id, String type) {
+        if (id == null || id.trim().isEmpty())
             return false;
-        if(type.equalsIgnoreCase("Student")) {
-            if (id.charAt(0) != 's' && id.charAt(0) != 'S')
-                return false;}
-        else if (id.charAt(0) != 'i' && id.charAt(0) != 'I') {
-                return false;}
+
+        char first = id.charAt(0);
+
+        if (type.equalsIgnoreCase("Lesson")) {
+            if (first != 'L' && first != 'l')
+                return false;
+        }
+        else if (type.equalsIgnoreCase("Course")) {
+            if (first != 'C' && first != 'c')
+                return false;
+        }
+        else if (type.equalsIgnoreCase("Student")) {
+            if (first != 'S' && first != 's')
+                return false;
+        }
+        else if (type.equalsIgnoreCase("Instructor")) {
+            if (first != 'I' && first != 'i')
+                return false;
+        }
+
         for (int i = 1; i < id.length(); i++) {
-                if (!Character.isDigit(id.charAt(i)))
-                    return false;
-            }
-            return true;
+            if (!Character.isDigit(id.charAt(i)))
+                return false;
+        }
+
+        return true;
     }
+
     public boolean idExist(String id){
         ArrayList<Student> students = list.getStudents();
         ArrayList<Instructor> instructors = list.getInstructors();
@@ -124,4 +142,22 @@ public class ValidationAndHashing {
             return instructors.get(i).name;
         }
     }
+    public boolean courseIdExist(String id) {
+        ArrayList<Course> courses = db.getCourses();
+
+        for (int i = 0; i < courses.size(); i++) {
+            if (courses.get(i).getCourseId().equalsIgnoreCase(id))
+                return true;
+        }
+        return false;
+    }
+    public boolean lessonIdExist(String id) {
+        ArrayList<Lesson> lessons = db.getLessons();
+        for (int i = 0; i < lessons.size(); i++) {
+            if (lessons.get(i).getId().equalsIgnoreCase(id))
+                return true;
+        }
+        return false;
+    }
+
 }

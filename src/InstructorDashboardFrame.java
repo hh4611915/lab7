@@ -1,116 +1,110 @@
-
 import javax.swing.*;
 import java.awt.*;
 
 public class InstructorDashboardFrame extends JFrame {
-    private JsonDatabaseManager db;
-    private Instructor instructor;
-
-    private DefaultListModel<Course> courseListModel = new DefaultListModel<>();
-    private JList<Course> courseJList = new JList<>(courseListModel);
-
-    private JButton btnCreate = new JButton("Create Course");
+    private CourseLessonDB db;
+    private PeopleDB peopleDb;
+    private String instructorId;
+    private DefaultListModel<Course> courseModel = new DefaultListModel<>();
+    private JList<Course> courseList = new JList<>(courseModel);
+    private JButton btnAdd = new JButton("Add Course");
     private JButton btnEdit = new JButton("Edit Course");
     private JButton btnDelete = new JButton("Delete Course");
-    private JButton btnManageLessons = new JButton("Manage Lessons");
-    private JButton btnViewStudents = new JButton("View Enrolled Students");
+    private JButton btnLessons = new JButton("Manage Lessons");
+    private JButton btnStudents = new JButton("View Enrolled Students");
     private JButton btnRefresh = new JButton("Refresh");
 
-    public InstructorDashboardFrame(JsonDatabaseManager db, Instructor instructor) {
-        super("Instructor Dashboard - " + instructor.getName());
+    public InstructorDashboardFrame(CourseLessonDB db, PeopleDB peopleDb, String instructorId) {
         this.db = db;
-        this.instructor = instructor;
-
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.peopleDb = peopleDb;
+        this.instructorId = instructorId;
+        setTitle("Instructor Dashboard - " + instructorId);
         setSize(800, 480);
         setLocationRelativeTo(null);
-        initComponents();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        init();
         loadCourses();
+        setVisible(true);
     }
 
-    private void initComponents() {
+    private void init() {
         JPanel left = new JPanel(new BorderLayout());
         left.setBorder(BorderFactory.createTitledBorder("Your Courses"));
-        courseJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        left.add(new JScrollPane(courseJList), BorderLayout.CENTER);
+        courseList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        left.add(new JScrollPane(courseList), BorderLayout.CENTER);
 
-        JPanel leftButtons = new JPanel(new GridLayout(6,1,8,8));
-        leftButtons.add(btnCreate);
+        JPanel leftButtons = new JPanel(new GridLayout(7,1,8,8));
+        leftButtons.add(btnAdd);
         leftButtons.add(btnEdit);
         leftButtons.add(btnDelete);
-        leftButtons.add(btnManageLessons);
-        leftButtons.add(btnViewStudents);
+        leftButtons.add(btnLessons);
+        leftButtons.add(btnStudents);
         leftButtons.add(btnRefresh);
 
-        add(left, BorderLayout.WEST);
-        add(leftButtons, BorderLayout.CENTER);
+        add(left, BorderLayout.CENTER);
+        add(leftButtons, BorderLayout.EAST);
 
-        btnCreate.addActionListener(e -> onCreateCourse());
-        btnEdit.addActionListener(e -> onEditCourse());
-        btnDelete.addActionListener(e -> onDeleteCourse());
-        btnManageLessons.addActionListener(e -> onManageLessons());
-        btnViewStudents.addActionListener(e -> onViewStudents());
+        btnAdd.addActionListener(e -> onAdd());
+        btnEdit.addActionListener(e -> onEdit());
+        btnDelete.addActionListener(e -> onDelete());
+        btnLessons.addActionListener(e -> onLessons());
+        btnStudents.addActionListener(e -> onViewStudents());
         btnRefresh.addActionListener(e -> loadCourses());
     }
 
     private void loadCourses() {
-        courseListModel.clear();
-        db.loadCourses();
+        courseModel.clear();
         for (Course c : db.getCourses()) {
-            if (instructor.getCreatedCourseIds().contains(c.getCourseId())) {
-                courseListModel.addElement(c);
-            }
+            if (c.getInstructorId().equals(instructorId)) courseModel.addElement(c);
         }
     }
 
-    private void onCreateCourse() {
-        CourseFormDialog dlg = new CourseFormDialog(this, "Create Course", null);
+    private void onAdd() {
+        CourseFormDialog dlg = new CourseFormDialog(this, "Add Course", null);
         dlg.setVisible(true);
         if (dlg.isSaved()) {
-            Course newCourse = instructor.createCourse(dlg.getCourseId(), dlg.getTitle(), dlg.getDescription());
-            db.addCourse(newCourse);
-            db.saveUsers();
+            Course c = new Course(dlg.getCourseId(), dlg.getTitle(), instructorId, dlg.getDescription());
+            db.addCourse(c);
             loadCourses();
         }
     }
 
-    private void onEditCourse() {
-        Course selected = courseJList.getSelectedValue();
-        if (selected == null) { JOptionPane.showMessageDialog(this, "Select a course first."); return; }
-        CourseFormDialog dlg = new CourseFormDialog(this, "Edit Course", selected);
+    private void onEdit() {
+        Course c = courseList.getSelectedValue();
+        if (c == null) { JOptionPane.showMessageDialog(this, "Select a course."); return; }
+        CourseFormDialog dlg = new CourseFormDialog(this, "Edit Course", c);
         dlg.setVisible(true);
         if (dlg.isSaved()) {
-            instructor.editCourse(selected, dlg.getTitle(), dlg.getDescription());
-            db.updateCourse(selected);
+            c.setName(dlg.getTitle());
+            c.setDescription(dlg.getDescription());
+            c.setInstructorId(instructorId);
+            db.updateCourse(c);
             loadCourses();
         }
     }
 
-    private void onDeleteCourse() {
-        Course selected = courseJList.getSelectedValue();
-        if (selected == null) { JOptionPane.showMessageDialog(this, "Select a course first."); return; }
-        int ok = JOptionPane.showConfirmDialog(this, "Delete course " + selected.getTitle() + " ?", "Confirm", JOptionPane.YES_NO_OPTION);
+    private void onDelete() {
+        Course c = courseList.getSelectedValue();
+        if (c == null) { JOptionPane.showMessageDialog(this, "Select a course."); return; }
+        int ok = JOptionPane.showConfirmDialog(this, "Delete course " + c.getName() + "?", "Confirm", JOptionPane.YES_NO_OPTION);
         if (ok == JOptionPane.YES_OPTION) {
-            db.removeCourse(selected.getCourseId());
-            instructor.removeCreatedCourse(selected.getCourseId());
-            db.saveUsers();
+            db.removeCourse(c.getId());
             loadCourses();
         }
     }
 
-    private void onManageLessons() {
-        Course selected = courseJList.getSelectedValue();
-        if (selected == null) { JOptionPane.showMessageDialog(this, "Select a course first."); return; }
-        LessonManagerDialog dlg = new LessonManagerDialog(this, db, instructor, selected);
+    private void onLessons() {
+        Course c = courseList.getSelectedValue();
+        if (c == null) { JOptionPane.showMessageDialog(this, "Select a course."); return; }
+        LessonManagerDialog dlg = new LessonManagerDialog(this, db, instructorId, c);
         dlg.setVisible(true);
-        db.loadCourses();
         loadCourses();
     }
 
     private void onViewStudents() {
-        Course selected = courseJList.getSelectedValue();
-        if (selected == null) { JOptionPane.showMessageDialog(this, "Select a course first."); return; }
-        EnrolledStudentsDialog dlg = new EnrolledStudentsDialog(this, db, selected);
+        Course c = courseList.getSelectedValue();
+        if (c == null) { JOptionPane.showMessageDialog(this, "Select a course."); return; }
+        EnrolledStudentsDialog dlg = new EnrolledStudentsDialog(this, peopleDb, c);
         dlg.setVisible(true);
     }
 }

@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Login extends JFrame {
     private JPanel p1;
-    private JTextField textFieldGmail;
+    private JTextField textFieldID;
     private JTextField textFieldPassword;
     private JButton loginButton;
     private JButton backButton;
@@ -29,14 +29,9 @@ public class Login extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            String gmail = textFieldGmail.getText();
-                if(!v.gmailValidation(gmail)){
-                    JOptionPane.showMessageDialog(null,"Invalid Email Format");
-                    return;
-                }
-                String id = v.gmailExist(gmail);
-                if(id == null){
-                    JOptionPane.showMessageDialog(null,"Email doesnt Exist");
+            String id = textFieldID.getText();
+                if(!v.idExist(id)){
+                    JOptionPane.showMessageDialog(null,"ID Doesnt Exist");
                     return;
                 }
                 String password = textFieldPassword.getText();
@@ -63,7 +58,9 @@ public class Login extends JFrame {
                 else {
                     JOptionPane.showMessageDialog(null,"Login Successful\nWelcome " + name);
                     setVisible(false);
-                    //new InstructorMenu();
+                    PeopleDB peopleDB = new PeopleDB();
+                    CourseLessonDB courseLessonDB = new CourseLessonDB();
+                    new InstructorDashboardFrame(courseLessonDB,peopleDB,id);
                 }
 
 

@@ -1,17 +1,16 @@
-
 import javax.swing.*;
 import java.awt.*;
 
 public class LessonFormDialog extends JDialog {
-    private JTextField tfId = new JTextField();
+    private JTextField tfLessonId = new JTextField();
     private JTextField tfTitle = new JTextField();
     private JTextArea taContent = new JTextArea(6, 25);
     private JButton btnSave = new JButton("Save");
     private JButton btnCancel = new JButton("Cancel");
     private boolean saved = false;
-
-    public LessonFormDialog(Dialog owner, String title, Lesson lesson) {
-        super(owner, title, true);
+    private ValidationAndHashing v = new ValidationAndHashing();
+    public LessonFormDialog(Window owner, String title, Lesson lesson) {
+        super(owner, title, ModalityType.APPLICATION_MODAL);
         setSize(420, 320);
         setLocationRelativeTo(owner);
         init(lesson);
@@ -20,29 +19,48 @@ public class LessonFormDialog extends JDialog {
     private void init(Lesson lesson) {
         JPanel p = new JPanel(new BorderLayout(6,6));
         JPanel fields = new JPanel(new GridLayout(2,1,4,4));
-        fields.add(labeled("Lesson ID:", tfId));
+        fields.add(labeled("Lesson ID:", tfLessonId));
         fields.add(labeled("Title:", tfTitle));
         p.add(fields, BorderLayout.NORTH);
         JPanel contentP = new JPanel(new BorderLayout());
         contentP.add(new JLabel("Content:"), BorderLayout.NORTH);
         contentP.add(new JScrollPane(taContent), BorderLayout.CENTER);
         p.add(contentP, BorderLayout.CENTER);
-
-        JPanel btns = new JPanel(); btns.add(btnSave); btns.add(btnCancel);
+        JPanel btns = new JPanel();
+        btns.add(btnSave);
+        btns.add(btnCancel);
         p.add(btns, BorderLayout.SOUTH);
         add(p);
-
         if (lesson != null) {
-            tfId.setText(lesson.getId()); tfId.setEnabled(false);
-            tfTitle.setText(lesson.getTitle()); taContent.setText(lesson.getContent());
+            tfLessonId.setText(lesson.getId());
+            tfLessonId.setEnabled(false);
+            tfTitle.setText(lesson.getTitle());
+            taContent.setText(lesson.getContent());
         }
-
         btnSave.addActionListener(e -> {
-            if (tfId.getText().trim().isEmpty() || tfTitle.getText().trim().isEmpty()) {
+
+            String id = tfLessonId.getText().trim();
+            String title = tfTitle.getText().trim();
+
+            if (id.isEmpty() || title.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "ID and Title required.");
                 return;
             }
-            saved = true; setVisible(false);
+
+            if (!v.validID(id, "Lesson")) {
+                JOptionPane.showMessageDialog(this,
+                        "Invalid Lesson ID.\nMust start with L followed by digits.");
+                return;
+            }
+
+            if (tfLessonId.isEnabled() && v.lessonIdExist(id)) {
+                JOptionPane.showMessageDialog(this,
+                        "This Lesson ID already exists for this course.");
+                return;
+            }
+
+            saved = true;
+            setVisible(false);
         });
         btnCancel.addActionListener(e -> setVisible(false));
     }
@@ -55,7 +73,7 @@ public class LessonFormDialog extends JDialog {
     }
 
     public boolean isSaved() { return saved; }
-    public String getLessonId() { return tfId.getText().trim(); }
+    public String getLessonId() { return tfLessonId.getText().trim(); }
     public String getTitle() { return tfTitle.getText().trim(); }
     public String getContent() { return taContent.getText().trim(); }
 }
